@@ -14,14 +14,28 @@ namespace VendingMachineProject
 
         public VendingMachine(List<Snack> inventory)
         {
-            foreach (var snack in inventory)
-            {
-                _inventory.Push(snack);
-            }
+            SetupSnackmachine();
+            FillInventory(inventory);
         }
+
+        private void SetupSnackmachine()
+        {
+            _inventory = new Stack<Snack>();
+            _currentlyInsertedCoins = new List<Coin>();
+        }
+
+        private void FillInventory(List<Snack> inventory)
+        {
+            if (inventory == null || inventory.Count == 0)
+            {
+                throw new ArgumentNullException("inventory");
+            }
+            inventory.ForEach(x => _inventory.Push(x));
+        }
+
         public Snack GetSnack()
         {
-            if (_insertedChange > SNACK_PRICE && _inventory.Peek() != null)
+            if (_insertedChange >= SNACK_PRICE && _inventory.Peek() != null)
             {
                 return _inventory.Pop();
             }
